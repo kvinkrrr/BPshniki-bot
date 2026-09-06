@@ -256,7 +256,7 @@ pending_requests = {}
 # /START
 # ==========================================
 
-@router.message(CommandStart())
+@router.message(Command("start"))
 async def start_handler(message: Message):
     caption="💎 🚀 👇🔜 😳 👅 😭\n\n"\
             "Мы рады видеть тебя в нашей боте-верификаторе, чтобы вступить в группу БПшники - подай заявку 💀:\n"\
