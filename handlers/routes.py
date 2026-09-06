@@ -18,11 +18,57 @@ router = Router()
 
 group_to_user = {}
 
+@router.message(Command("start"))
+async def start_handler(message: Message):
+    caption="💎 🚀 👇🔜 😳 👅 😭\n\n"\
+            "Мы рады видеть тебя в нашей боте-верификаторе, чтобы вступить в группу БПшники - подай заявку 💀:\n"\
+            "https://t.me/bpshniki - ссылка на группу БПшники\n\n"\
+            "Если ты подал заявку на вступление в группу, "\
+            "дождись сообщения с проверочным текстом 🔫.\n\nЕсли у тебя возникла проблема - отправь команду /send"
+    emojis = [
+        ("💎", "5282759888034878668"),
+        ("🚀", "5285448181079891664"),
+        ("👇", "5285346828441640817"),
+        ("🔜", "5283084836670563301"),
+        ("😳", "5285152605725545670"),
+        ("👅", "5285226311659313403"),
+        ("😭", "5282901892538589652"),
+        ("💀", "5256258204651785650"),
+        ("🔫", "5341429493485574514")
+    ]
+
+    entities = []
+
+    # Добавляем Premium Emoji
+    for emoji, emoji_id in emojis:
+        pos = caption.find(emoji)
+
+        entities.append(
+            MessageEntity(
+                type="custom_emoji",
+                offset=len(
+                    caption[:pos].encode("utf-16-le")
+                ) // 2,
+                length=len(
+                    emoji.encode("utf-16-le")
+                ) // 2,
+                custom_emoji_id=emoji_id
+            )
+        )
+    await message.answer_photo(
+        photo=FSInputFile("bp.jpg"),
+        caption=caption,
+        caption_entities=entities
+
+    )
+
+
 # ID сообщения пользователя -> ID сообщения в группе
 user_to_group = {}
 
 class SendMessage(StatesGroup):
     waiting_for_message = State()
+
 
 @router.message(Command("send"))
 async def send_command(message:Message, state: FSMContext):
@@ -254,50 +300,6 @@ pending_requests = {}
 # ==========================================
 # /START
 # ==========================================
-
-@router.message(Command("start"))
-async def start_handler(message: Message):
-    caption="💎 🚀 👇🔜 😳 👅 😭\n\n"\
-            "Мы рады видеть тебя в нашей боте-верификаторе, чтобы вступить в группу БПшники - подай заявку 💀:\n"\
-            "https://t.me/bpshniki - ссылка на группу БПшники\n\n"\
-            "Если ты подал заявку на вступление в группу, "\
-            "дождись сообщения с проверочным текстом 🔫.\n\nЕсли у тебя возникла проблема - отправь команду /send"
-    emojis = [
-        ("💎", "5282759888034878668"),
-        ("🚀", "5285448181079891664"),
-        ("👇", "5285346828441640817"),
-        ("🔜", "5283084836670563301"),
-        ("😳", "5285152605725545670"),
-        ("👅", "5285226311659313403"),
-        ("😭", "5282901892538589652"),
-        ("💀", "5256258204651785650"),
-        ("🔫", "5341429493485574514")
-    ]
-
-    entities = []
-
-    # Добавляем Premium Emoji
-    for emoji, emoji_id in emojis:
-        pos = caption.find(emoji)
-
-        entities.append(
-            MessageEntity(
-                type="custom_emoji",
-                offset=len(
-                    caption[:pos].encode("utf-16-le")
-                ) // 2,
-                length=len(
-                    emoji.encode("utf-16-le")
-                ) // 2,
-                custom_emoji_id=emoji_id
-            )
-        )
-    await message.answer_photo(
-        photo=FSInputFile("bp.jpg"),
-        caption=caption,
-        caption_entities=entities
-
-    )
 
 
 # ==========================================
